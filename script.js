@@ -49,14 +49,12 @@ async function getWeather (location) {
         }
         else {
             const weatherData = await response.json();
-            console.log(weatherData);
             let newCity = City(weatherData);
             currentCity = newCity;
             updateWeather(newCity);
         }
         
     } catch (error) {
-        console.log(error);
         badInput();
     }
     
@@ -97,7 +95,6 @@ function updateWeather (newCity) {
     cityName.textContent = newCity.name;
     displayTemp();
     changeBG(newCity.weather);
-    console.log(currentBG);
     today.style.backgroundImage = currentBG;
     today.style.backgroundSize = 'cover';
 
@@ -141,7 +138,6 @@ function changeTemp () {
 
 
 function changeBG (id) {
-    console.log(id);
     if (id >= 200 && id <= 232) {
         currentBG = "url('./weather_imgs/thunderstorm.jpg')"
     }
