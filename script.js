@@ -39,7 +39,7 @@ cityTemp.addEventListener('click', changeTemp);
 async function getWeather (location) {
     try {
         //Weather
-        const response = await fetch ('http://api.openweathermap.org/data/2.5/weather?q=' + location + '&APPID=2955ee6369013246c6d4ce74fcff09e1', {mode: 'cors'});
+        const response = await fetch ('https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=' + location + '&APPID=2955ee6369013246c6d4ce74fcff09e1', {mode: 'cors'});
         //Forecast
         //const response = await fetch ('http://api.openweathermap.org/data/2.5/forecast?q=' + defaultLocation + '&appid=2955ee6369013246c6d4ce74fcff09e1')
         //console.log(response);
