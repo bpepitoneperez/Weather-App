@@ -10,12 +10,28 @@
 <body>
     <div id='top-bar'>
         <form id='search-form'>
-            <input type='text' placeholder="Citi Name">
-            <button type='submit'>Search</button>
+            <input type='text' id='search' placeholder="Citi Name">
+            <button type='submit' id='submit'>Search</button>
         </form>
+        <button id='switch'>F° / C°</button>
     </div>
     <div id='content'>
+        <div id='today'>
+            <div id='city'>
+                <div id=city-name></div>
+                <div id='city-temp'></div>
+            </div>
+            <div id='city-stats'>
+                <div id='min-max'>
+                    <p id='min'></p>
+                    <p id='max'></p>
+                </div>
+                <p id='humidity'></dipv>
+            </div> 
+        </div>
+        <div id='forecast'>
 
+        </div>
     </div>
 </body>
 </html>
