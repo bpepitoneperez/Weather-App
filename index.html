@@ -5,15 +5,22 @@
     <title>Weather App</title>
     <link rel="shortcut icon" type="image/png" href="sunny-favicon.png"/>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="script.js" defer></script>
 </head>
 <body>
     <div id='top-bar'>
+        <p id='logo'>The Weather</p>
         <form id='search-form'>
-            <input type='text' id='search' placeholder="Citi Name">
-            <button type='submit' id='submit'>Search</button>
+            <button id='submit'><span class="material-icons">search</span></button>
+            <input type='text' id='search' placeholder="Search City">
         </form>
-        <button id='switch'>F° / C°</button>
     </div>
     <div id='content'>
         <div id='today'>
@@ -21,12 +28,12 @@
                 <div id=city-name></div>
                 <div id='city-temp'></div>
             </div>
+            <div id='line'></div>
             <div id='city-stats'>
-                <div id='min-max'>
-                    <p id='min'></p>
-                    <p id='max'></p>
-                </div>
-                <p id='humidity'></dipv>
+                <p id='description'></p>
+                <p id='min'></p>
+                <p id='max'></p>
+                <p id='humidity'></p>
             </div> 
         </div>
         <div id='forecast'>

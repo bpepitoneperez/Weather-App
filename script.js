@@ -1,17 +1,21 @@
 const content = document.querySelector('#content');
 const today = document.querySelector('#today');
-const city = document.querySelector('#city-name');
+const city = document.querySelector('#city');
+const cityName = document.querySelector('#city-name');
 const cityTemp = document.querySelector('#city-temp');
 const cityStats = document.querySelector('#city-stats');
 const humidity = document.querySelector('#humidity');
 const minmaxDiv = document.querySelector('#min-max');
 const min = document.querySelector('#min');
 const max = document.querySelector('#max');
+const description = document.querySelector('#description');
 const forecast = document.querySelector('#forecast');
+const search = document.querySelector('#search');
 
 let defaultLocation = 'london';
 let celcius = false;
 let currentCity;
+let currentBG;
 
 const form = document.querySelector('#search-form');
 let input = document.querySelector('#search');
@@ -26,31 +30,34 @@ form.addEventListener('submit', (event) => {
     }
 });
 
+
+
 const switcher = document.querySelector('#switch');
-switcher.addEventListener('click', changeTemp);
+cityTemp.addEventListener('click', changeTemp);
 
 
 async function getWeather (location) {
     try {
         //Weather
-        const response = await fetch ('http://api.openweathermap.org/data/2.5/weather?q=' + location + '&APPID=2955ee6369013246c6d4ce74fcff09e1');
+        const response = await fetch ('http://api.openweathermap.org/data/2.5/weather?q=' + location + '&APPID=2955ee6369013246c6d4ce74fcff09e1', {mode: 'cors'});
         //Forecast
         //const response = await fetch ('http://api.openweathermap.org/data/2.5/forecast?q=' + defaultLocation + '&appid=2955ee6369013246c6d4ce74fcff09e1')
         //console.log(response);
         //console.log(response.status);
-        if (response.ok) {
-            const weatherData = await response.json();
-            console.log(weatherData);
-            let city = City(weatherData);
-            currentCity = city;
-            updateWeather(city);
+        if (response.status === 400) {
+            badInput();
         }
         else {
-            badInput();
+            const weatherData = await response.json();
+            console.log(weatherData);
+            let newCity = City(weatherData);
+            currentCity = newCity;
+            updateWeather(newCity);
         }
         
     } catch (error) {
-        //console.log(error);
+        console.log(error);
+        badInput();
     }
     
 }
@@ -65,8 +72,7 @@ const City = (data) => {
     let tempFMax = Math.round(tempCMax * 1.8 + 32);
     let tempFMin = Math.round(tempCMin * 1.8 + 32);
     let humidity = data.main.humidity + '%';
-    let weather = data.weather[0].main;
-    let weatherIcon = getWeatherIcon(data.weather[0].id)
+    let weather = data.weather[0].id;
     let weatherDescription = data.weather[0].description;
     let sunrise = convertTime(data.sys.sunrise, data.timezone);
     let sunset = convertTime(data.sys.sunset, data.timezone);
@@ -81,7 +87,6 @@ const City = (data) => {
         tempFMin,
         humidity,
         weather,
-        weatherIcon,
         weatherDescription,
         sunrise,
         sunset,
@@ -89,22 +94,22 @@ const City = (data) => {
 }
 
 function updateWeather (newCity) {
-    city.textContent = newCity.name;
-
+    cityName.textContent = newCity.name;
     displayTemp();
+    changeBG(newCity.weather);
+    console.log(currentBG);
+    today.style.backgroundImage = currentBG;
+    today.style.backgroundSize = 'cover';
 
-    console.log(humidity);
     humidity.textContent = 'Humidity: ' + newCity.humidity;
-
-    console.log(newCity.weather);
-    console.log(newCity.weatherDescription);
-    console.log(newCity.sunrise);
+    description.textContent = newCity.weatherDescription;
 }
 
 
 
 function badInput () {
-    //Do stuff
+    cityName.style.color = 'pink';
+    setTimeout(function(){ cityName.style.color = 'white'; }, 200);
 }
 
 function convertTime(unixTime, offset){
@@ -118,14 +123,14 @@ function convertTime(unixTime, offset){
 function displayTemp () {
 
     if (celcius) {
-        cityTemp.textContent = currentCity.tempC + '°';
-        min.textContent = 'Low: ' + currentCity.tempCMin + '°';
-        max.textContent = 'High: ' + currentCity.tempCMax + '°';
+        cityTemp.textContent = currentCity.tempC + '°C';
+        min.textContent = 'Low: ' + currentCity.tempCMin + '°C';
+        max.textContent = 'High: ' + currentCity.tempCMax + '°C';
     }
     else {
-        cityTemp.textContent = currentCity.tempF + '°';
-        min.textContent = 'Low: ' + currentCity.tempFMin + '°';
-        max.textContent = 'High: ' + currentCity.tempFMax + '°';
+        cityTemp.textContent = currentCity.tempF + '°F';
+        min.textContent = 'Low: ' + currentCity.tempFMin + '°F';
+        max.textContent = 'High: ' + currentCity.tempFMax + '°F';
     }
 }
 
@@ -134,42 +139,44 @@ function changeTemp () {
     displayTemp();
 }
 
-function getWeatherIcon (id) {
+
+function changeBG (id) {
+    console.log(id);
     if (id >= 200 && id <= 232) {
-        return 'http://openweathermap.org/img/wn/11d@2x.png'
+        currentBG = "url('./weather_imgs/thunderstorm.jpg')"
     }
     else if (id >= 300 && id <= 321) {
-        return 'http://openweathermap.org/img/wn/09d@2x.png'
+        currentBG = "url('./weather_imgs/shower-rain.jpg')";
     }
     else if (id >= 500 && id <= 504) {
-        return 'http://openweathermap.org/img/wn/10d@2x.png'
+        currentBG = "url('./weather_imgs/rain.jpg')";
     }
     else if (id == 511) {
-        return 'http://openweathermap.org/img/wn/13d@2x.png'
+        currentBG = "url('./weather_imgs/snow.jpg')";
     }
     else if (id >= 520 && id <= 531) {
-        return 'http://openweathermap.org/img/wn/09d@2x.png'
+        currentBG = "url('./weather_imgs/shower-rain.jpg')";
     }
     else if (id >= 600 && id <= 622) {
-        return 'http://openweathermap.org/img/wn/13d@2x.png'
+        currentBG = "url('./weather_imgs/snow.jpg')";
     }
     else if (id >= 701 && id <= 781) {
-        return 'http://openweathermap.org/img/wn/50d@2x.png'
+        currentBG = "url('./weather_imgs/mist.jpg')";
     }
     else if (id == 800) {
-        return 'http://openweathermap.org/img/wn/01d@2x.png'
+        currentBG = "url('./weather_imgs/clear-sky.jpg')";
     }
     else if (id == 801) {
-        return 'http://openweathermap.org/img/wn/02d@2x.png'
+        currentBG = "url('./weather_imgs/few-clouds.jpg')";
     }
     else if (id == 802) {
-        return 'http://openweathermap.org/img/wn/03d@2x.png'
+        currentBG = "url('./weather_imgs/scattered-clouds.jpg')";
     }
     else if (id == 803) {
-        return 'http://openweathermap.org/img/wn/04d@2x.png'
+        currentBG = "url('./weather_imgs/broken-clouds.jpg')";
     }
     else if (id == 804) {
-        return 'http://openweathermap.org/img/wn/04d@2x.png'
+        currentBG = "url('./weather_imgs/broken-clouds.jpg')";
     }
 }
 
